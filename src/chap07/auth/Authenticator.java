@@ -1,0 +1,21 @@
+package chap07.auth;
+
+import chap07.member.MemberInfo;
+import chap07.member.MemberService;
+
+public class Authenticator {
+	private MemberService memberService;
+	//setter injection constructor injection
+	public Authenticator(MemberService memberService) {
+		this.memberService = memberService;
+	}
+	public Auth authenticate(String email, String password) {
+		MemberInfo mi = memberService.getMemberInfoByEmail(email);
+		if(mi == null)
+			throw new AuthenticationException();
+		if(!mi.matchPassword(password))
+			throw new AuthenticationException();
+		
+		return new Auth(mi.getId(), mi.getName());
+	}
+}
